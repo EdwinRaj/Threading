@@ -28,6 +28,12 @@ namespace ThreadOperationTests
             threadAbort.Example();
         }
 
+        [TestMethod]
+        public void DelegateTest()
+        {
+            var demo = new DelegateThreadPoolDemo();
+            demo.Example();
+        }
         
     }
 }

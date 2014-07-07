@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackgroundThreadBehaviour",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadPoolDemo", "ThreadPoolDemo\ThreadPoolDemo.csproj", "{2448ABF3-FD95-42D4-9356-51105D2E0D51}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceCondition", "RaceCondition\RaceCondition.csproj", "{81BD2B52-77D5-4864-B3B9-DD515958779B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProducerConsumerWaitSyn", "ProducerConsumerWaitSyn\ProducerConsumerWaitSyn.csproj", "{98239B85-2C26-48F6-9F37-B96E590F7C30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{2448ABF3-FD95-42D4-9356-51105D2E0D51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2448ABF3-FD95-42D4-9356-51105D2E0D51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2448ABF3-FD95-42D4-9356-51105D2E0D51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81BD2B52-77D5-4864-B3B9-DD515958779B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81BD2B52-77D5-4864-B3B9-DD515958779B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81BD2B52-77D5-4864-B3B9-DD515958779B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81BD2B52-77D5-4864-B3B9-DD515958779B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98239B85-2C26-48F6-9F37-B96E590F7C30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98239B85-2C26-48F6-9F37-B96E590F7C30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98239B85-2C26-48F6-9F37-B96E590F7C30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98239B85-2C26-48F6-9F37-B96E590F7C30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
