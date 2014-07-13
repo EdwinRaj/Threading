@@ -58,71 +58,91 @@ namespace StockHistory
 		/// <param name="numYearsOfHistory">years of history > 0, e.g. 10</param>
 		private static void ProcessStockSymbol(string symbol, int numYearsOfHistory)
 		{
-			try
-			{
-				StockData data = DownloadData.GetHistoricalData(symbol, numYearsOfHistory);
+		    try
+		    {
+		        StockData data = DownloadData.GetHistoricalData(symbol, numYearsOfHistory);
 
-				int N = data.Prices.Count;
+		        int N = data.Prices.Count;
 
-			    Task<decimal> minTask = Task.Factory.StartNew(() =>
-			    {
-			        decimal min = data.Prices.Min();
-			        return min;
-			    });
+                //Task errorTask = Task.Factory.StartNew(() =>
+                //                                       {
+                //                                           int i = 1000;
+                //                                           int j = 0;
+                //                                           int k = i/j; //introducing exception
+                //                                       });
 
-                Task<decimal> maxTask = Task.Factory.StartNew(() =>
-                {
-                    decimal max = data.Prices.Max();
-                    return max;
-                });
+		        Task<decimal> minTask = Task.Factory.StartNew(() =>
+		                                                      {
+		                                                          decimal min = data.Prices.Min();
+		                                                          return min;
+		                                                      });
 
-                Task<decimal> avgTask = Task.Factory.StartNew(() =>
-                {
-                    decimal avg = data.Prices.Average();
-                    return avg;
-                });
+		        Task<decimal> maxTask = Task.Factory.StartNew(() =>
+		                                                      {
+		                                                          decimal max = data.Prices.Max();
+		                                                          return max;
+		                                                      });
+
+		        Task<decimal> avgTask = Task.Factory.StartNew(() =>
+		                                                      {
+		                                                          decimal avg = data.Prices.Average();
+		                                                          return avg;
+		                                                      });
 
 
-                Task<double> stdDevTask = Task.Factory.StartNew(() =>
-                {
-                    // Standard deviation:
-                    double sum = 0.0;
-                    decimal avg = data.Prices.Average();
+		        Task<double> stdDevTask = Task.Factory.StartNew(() =>
+		                                                        {
+		                                                            // Standard deviation:
+		                                                            double sum = 0.0;
+		                                                            decimal avg = data.Prices.Average();
 
-                    foreach (decimal value in data.Prices)
-                        sum += Math.Pow(Convert.ToDouble(value - avg), 2.0);
+		                                                            foreach (decimal value in data.Prices)
+		                                                                sum += Math.Pow(Convert.ToDouble(value - avg), 2.0);
 
-                    double stddev = Math.Sqrt(sum / N);
-                    return stddev;
-                });
+                                                                    ////Introducing exceptions
+                                                                    //int i = 0;
+                                                                    //int j = 1000 / i;
 
-			    Task<double> stdErrorTask = stdDevTask.ContinueWith<double>((antecedent) =>
-			                                                                {
-			                                                                    double stddev = antecedent.Result;
-			                                                                    double stderr = stddev/Math.Sqrt(N);
-			                                                                    return stderr;
-			                                                                });
+		                                                            double stddev = Math.Sqrt(sum/N);
+		                                                            return stddev;
+		                                                        });
 
-				// Standard error:
-				
+		        Task<double> stdErrorTask = stdDevTask.ContinueWith<double>((antecedent) =>
+		                                                                    {
+		                                                                        double stddev = antecedent.Result;
+		                                                                        double stderr = stddev/Math.Sqrt(N);
+		                                                                        return stderr;
+		                                                                    });
 
-				//
-				// Output:
-				//
+		        // Standard error:
 
-			    Task[] statisticsTasks = {minTask,maxTask,avgTask,stdDevTask,stdErrorTask};
-			    Task.WaitAll(statisticsTasks);
 
-				Console.WriteLine();
-				Console.WriteLine("** {0} **", symbol);
-				Console.WriteLine("   Data source:  '{0}'", data.DataSource);
-				Console.WriteLine("   Data points:   {0:#,##0}", N);
-				Console.WriteLine("   Min price:    {0:C}", minTask.Result);
-				Console.WriteLine("   Max price:    {0:C}", maxTask.Result);
-				Console.WriteLine("   Avg price:    {0:C}", avgTask.Result);
-				Console.WriteLine("   Std dev/err:   {0:0.000} / {1:0.000}", stdDevTask.Result, stdErrorTask.Result);
-			}
-			catch (Exception ex)
+		        //
+		        // Output:
+		        //
+
+                Task[] statisticsTasks = { minTask, maxTask, avgTask, stdDevTask, stdErrorTask };//errorTask
+		        Task.WaitAll(statisticsTasks);
+
+		        Console.WriteLine();
+		        Console.WriteLine("** {0} **", symbol);
+		        Console.WriteLine("   Data source:  '{0}'", data.DataSource);
+		        Console.WriteLine("   Data points:   {0:#,##0}", N);
+		        Console.WriteLine("   Min price:    {0:C}", minTask.Result);
+		        Console.WriteLine("   Max price:    {0:C}", maxTask.Result);
+		        Console.WriteLine("   Avg price:    {0:C}", avgTask.Result);
+		        Console.WriteLine("   Std dev/err:   {0:0.000} / {1:0.000}", stdDevTask.Result, stdErrorTask.Result);
+		    }
+		    catch (AggregateException aggException)
+		    {
+		        Console.WriteLine("Tasking Error Follows:");
+		        AggregateException flattenException = aggException.Flatten();
+		        foreach (Exception innerException in flattenException.InnerExceptions)
+		        {
+		            Console.WriteLine(innerException.Message);
+		        }
+		    }
+		    catch (Exception ex)
 			{
 				Console.WriteLine();
 				Console.WriteLine("** {0} **", symbol);
